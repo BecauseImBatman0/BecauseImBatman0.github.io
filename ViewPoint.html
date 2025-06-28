@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .gallery-container {
+      position: relative;
+      width: 100%;
+      /* Expand to full width */
+      margin: auto;
+    }
+
+    .gallery {
+      display: flex;
+      overflow-x: scroll;
+      scroll-behavior: smooth;
+      padding: 10px;
+      background-color: #f5f5f5;
+      scrollbar-width: none;
+      /* Firefox */
+    }
+
+    .gallery::-webkit-scrollbar {
+      display: none;
+      /* Chrome, Safari, Opera */
+    }
+
+    .gallery-item {
+      flex: 0 0 calc(25% - 20px);
+      /* Four items per row */
+      margin: 0 10px;
+      text-align: center;
+    }
+
+    .gallery-item video {
+      width: 100%;
+      height: auto;
+      cursor: pointer;
+    }
+
+    .gallery-item p {
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2rem;
+      cursor: pointer;
+      user-select: none;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      padding: 10px;
+    }
+
+    .arrow-left {
+      left: 10px;
+      /* Adjust as needed */
+    }
+
+    .arrow-right {
+      right: 10px;
+      /* Adjust as needed */
+    }
+
+    .pagination-dots {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .pagination-dots span {
+      height: 10px;
+      width: 10px;
+      margin: 0 5px;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .pagination-dots .active {
+      background-color: #717171;
+    }
+
+    .authors {
+      color: #ffffff;
+      /* Dark blue color */
+      font-weight: bold;
+      font-size: 1.25rem;
+      /* Adjust font size if necessary */
+    }
+
+    .authors a {
+      color: #b6e0f8cb;
+      /* Dark blue color for links */
+      text-decoration: none;
+      /* Optional: remove underline from links */
+    }
+
+    .authors sup {
+      color: #99b6d8;
+      /* Dark blue color for superscripts */
+    }
+
+    video {
+      height: auto;
+    }
+  </style>
+
+  <!-- reset css  -->
+  <link href="static/ViewPoint/css/vrcss/reset.css" rel="stylesheet" />
+
+  <link href="static/ViewPoint/css/vrcss/index.css" rel="stylesheet" />
+
+  <script src="static/ViewPoint/css/vrcss/index.js" defer></script>
+
+  <script src="static/ViewPoint/css/vrcss/aframe.min.js" defer></script>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const gallery = document.querySelector('.gallery');
+      const dotsContainer = document.querySelector('.pagination-dots');
+      const items = gallery.children;
+      const itemsCount = items.length;
+
+      function createDots() {
+        for (let i = 0; i < itemsCount; i++) {
+          const dot = document.createElement('span');
+          dot.classList.add('dot');
+          if (i === 0) dot.classList.add('active');
+          dotsContainer.appendChild(dot);
+        }
+      }
+
+      function updateDots() {
+        const dots = dotsContainer.children;
+        const scrollLeft = gallery.scrollLeft;
+        const itemWidth = gallery.scrollWidth / itemsCount;
+        const index = Math.round(scrollLeft / itemWidth);
+
+        for (let i = 0; i < dots.length; i++) {
+          dots[i].classList.remove('active');
+        }
+        dots[index].classList.add('active');
+      }
+
+
+    });
+
+    function scrollGallery(galleryId, distance) {
+      const gallery = document.getElementById(galleryId);
+      gallery.scrollBy({
+        left: distance,
+        behavior: 'smooth'
+      });
+    }
+  </script>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>ViewPoint: Panoramic Video Generation with Pretrained Diffusion Models</title>
+  <link rel="icon" type="image/x-icon" href="static/ViViD/images/favicon.ico">
+ 
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:image" content="images/teaser.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1711">
+  <meta property="og:image:height" content="576">
+  <meta property="og:type" content="website" />
+ 
+ 
+   
+
+  <meta name="twitter:card" content="summary_large_image" />
+ 
+ 
+
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.css">
+  <link rel="stylesheet" href="static/ViewPoint/css/app.css">
+  <link rel="stylesheet" href="static/ViewPoint/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.3/clipboard.min.js"></script>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+  <script defer src="static/ViewPoint/js/fontawesome.all.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+  <script src="static/ViewPoint/js/app.js"></script>
+  <script src="static/ViewPoint/js/synced_video_selector.js"></script>
+
+</head>
+<body style="padding: 0%; width: 100%">
+    <div class="desktop-content">
+    <div class="video-background" style="margin-bottom: 0px; padding-bottom: 0px;">
+        <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
+            <source src="static/ViewPoint/videos/VIEWPOINT VIDEO/vangogh.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+        <div class="flex-center-container"> <!-- New container for flexbox centering -->
+            <div class="content">
+                <!-- <h1 style="font-size: 48px;"><b>Imagine360: Immersive 360 Video Generation from Perspective Anchor</b></h1> -->
+                <h1 style="font-size: 2.5vw;"><b>ViewPoint: Panoramic Video Generation with Pretrained Diffusion Models</b></h1>
+
+                <p class="title is-5 mt-2 authors"> 
+                    <a href="https://becauseimbatman0.github.io/" target="_blank">Zixun Fang</a><sup>1,2</sup>, 
+                    <a href="https://scholar.google.com/citations?user=Mo_2YsgAAAAJ&hl=en" target="_blank">Kai Zhu</a><sup>1,2</sup>, 
+
+                    <a href="https://johanan528.github.io/" target="_blank">Zhiheng Liu</a><sup>3</sup>, 
+                    <a href="https://scholar.google.com/citations?user=8zksQb4AAAAJ&hl=en" target="_blank">Yu Liu</a><sup>2</sup>, 
+
+                    <a href="https://tiaotiao11-22.github.io/wzhai/" target="_blank">Wei Zhai</a><sup>1</sup>&#9993,
+                    <a href="https://scholar.google.com/citations?user=K7rTHNcAAAAJ&hl=en" target="_blank">Yang Cao</a><sup>1</sup>,
+                    <a href="https://scholar.google.com/citations?user=gDnBC1gAAAAJ&hl=en" target="_blank">Zheng-Jun Zha</a><sup>1</sup>
+              
+                  </p>
+                  <!-- affiliations -->
+                  <p class="subtitle is-5"> 
+                    <sup>1</sup> University of Science and Technology of China 
+                    <sup>2</sup> TongYi Lab 
+                    <sup>3</sup> The University of Hong Kong 
+             
+                  </p>
+
+                  <div class="row justify-content-center">
+                    <div class="col-12 h3">
+                        <a href="todo" class="btn btn-light" role="button" style="font-size: 20px;">Paper</a>
+                        <a href="https://github.com/ali-vilab/ViewPoint" class="btn btn-outline-light" role="button" style="font-size: 20px;">Code</a>
+                    </div>
+                </div>
+
+                <div class="container-fluid h-0 h-md-0 w-100 d-flex flex-column custom-spacing text-center" style="padding-top: 0px;">
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+
+  <div class="mobile-content">
+    <div class="container-fluid h-100 h-md-100 w-100 d-flex flex-column justify-content-center text-center my-5"
+      style="height:100vh;">
+      <div class="row justify-content-center mb-3 order-md-first">
+        <div class="col-12">
+
+
+          <video class="img-fluid pb-3" loop autoplay muted controls>
+            <source src="static/ViewPoint/videos/demo_video.mp4" />
+          </video>
+
+          <script>
+            document.addEventListener('DOMContentLoaded', function () {
+              var video = document.getElementById('myVideo');
+
+              function isMobileDevice() {
+                return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+              };
+
+              if (!isMobileDevice()) {
+                setTimeout(function () {
+                  video.setAttribute('controls', '');
+                }, 1500); // 2000 milliseconds = 2 seconds
+              } else {
+                video.setAttribute('controls', '');
+              }
+            });
+          </script>
+        </div>
+      </div>
+      <div class="row justify-content-center mb-3">
+
+
+
+   
+
+
+      </div>
+      <div class="row justify-content-center mb-3">
+        <div class="col-12">
+        </div>
+      </div>
+      <div class="row justify-content-center">
+
+      </div>
+    </div>
+
+    <div class="video-background">
+      <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
+        <source src="static/ViewPoint/videos/teaser/teaser.mp4" type="video/mp4">
+      </video>
+      <div class="video-overlay"></div>
+      <div class="flex-center-container">
+         
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <div class="desktop-content">
+    <!-- <div class="container-fluid px-5" id="main">
+
+
+    </div>
+    <br> -->
+  </div>
+
+
+  </div>
+
+  <div class="mobile-content">
+    <div class="container" id="main">
+
+      <div class="row py-5 align-items-center justify-content-center" id="abstract">
+        <div class="col-md-6">
+
+
+        </div>
+
+      </div>
+      <br>
+    </div>
+  </div>
+
+
+
+  <div class="container-fluid">
+    <div class="row py-5  bg-dark">
+      <div class="col-2"></div>
+      <div class="col-md-8">
+        <h1 class="text-center pb-3 text-white">
+          <b>Gallery <span class="small-text">(click below pano videos to open VR mode)</span></b>
+
+        </h1>
+        <p class="text-center small-text" style="color: red; font-weight: bold;">
+          We highly recommend using a mobile phone to access the website(better use Chrome browser) for device motion
+          tracking, enhancing the immersive quality of the VR interactive experience. </p>
+        </p>
+
+        <p class="text-center small-text" style="color: yellow; font-weight: bold;">
+          NOTE: The Loading may be a little slow, but your wait will be worth it !!! </p>
+        </p>
+
+        <script>
+          activeMethodPill = "zipnerf"
+          activeScenePill = document.querySelector('.scene-pill.active-pill');
+          activeModePill = document.querySelector('.mode-pill.active-pill');
+        </script>
+
+        <div class="text-center">
+          <div class="video-container">
+
+            <div class="video">
+              <video class="video" style="width: 100%; max-width: 100%;" id="compVideo0" loop playsinline autoplay
+                muted>
+                <source data-src="static/ViewPoint/videos/PANO VIDEO/moon.mp4">
+              </video>
+            </div>
+
+            <video class="video" style="width: 100%; max-width: 100%; display: none;" id="compVideo1" loop playsinline
+              autoplay muted>
+              <source
+                src="static/ViewPoint/videos/INPUT VIDEO/a city street covered in snow with cherry blossom trees lining the sidewalks.mp4" />
+            </video>
+
+
+
+          </div>
+          <div class="text-center" style="color: black;" id="mode-pills">
+            <div class="btn-group btn-group-sm">
+
+              <span class="btn btn-primary mode-pill active" data-value="PANO VIDEO"
+                onclick="selectCompVideo(activeMethodPill, activeScenePill, null, this)">
+                PANO VIDEO
+              </span>
+
+              <span class="btn btn-primary mode-pill active" data-value="VIEWPOINT VIDEO"
+                onclick="selectCompVideo(activeMethodPill, activeScenePill, null, this)">
+                VIEWPOINT VIDEO
+              </span>
+
+
+              <span class="btn btn-primary mode-pill active" data-value="INPUT VIDEO"
+                onclick="selectCompVideo(activeMethodPill, activeScenePill, null, this)">
+                INPUT VIDEO
+              </span>
+
+
+            </div>
+          </div>
+
+
+          <br>
+          <p class="text-justify text-white" style="text-align: center;" id="prompt-box">The video shows the astronauts
+            strolling slowly on the desolate surface of the moon.</p>
+          <script>
+            const video0 = document.getElementById("compVideo0");
+            const video1 = document.getElementById("compVideo1");
+
+            function switchVideo(activeVidID) {
+              if (activeVidID === 0) {
+                video0.classList.add("active");
+                video1.classList.remove("active");
+                video0.play();
+                video1.pause();
+              } else if (activeVidID === 1) {
+                video1.classList.add("active");
+                video0.classList.remove("active");
+                video1.play();
+                video0.pause();
+              }
+            }
+
+            document.querySelector("button#switchToVideo0").addEventListener("click", () => {
+              switchVideo(0);
+            });
+
+            document.querySelector("button#switchToVideo1").addEventListener("click", () => {
+              switchVideo(1);
+            });
+          </script>
+
+
+          <div class="pill-row scene-pills" id="scene-pills">
+
+            <span class="pill scene-pill active" data-value="moon" onclick="selectCompVideo(activeMethodPill, this, 3)">
+              <img class="thumbnail-img" src="static/ViewPoint/videos/inputs/moon.png" alt="moon" width="64">
+            </span>
+
+            <span class="pill scene-pill" data-value="cliff" onclick="selectCompVideo(activeMethodPill, this, 3)">
+              <img class="thumbnail-img" src="static/ViewPoint/videos/inputs/cliff.png" alt="cliff" width="64">
+            </span>
+
+            <span class="pill scene-pill" data-value="b2" onclick="selectCompVideo(activeMethodPill, this, 3)">
+              <img class="thumbnail-img" src="static/ViewPoint/videos/inputs/b2.png" alt="b2" width="64">
+            </span>
+
+
+            <span class="pill scene-pill" data-value="hometown" onclick="selectCompVideo(activeMethodPill, this, 3)">
+              <img class="thumbnail-img" src="static/ViewPoint/videos/inputs/hometown.png" alt="hometown" width="64">
+            </span>
+
+            <span class="pill scene-pill" data-value="roadway" onclick="selectCompVideo(activeMethodPill, this, 3)">
+              <img class="thumbnail-img" src="static/ViewPoint/videos/inputs/roadway.png" alt="roadway" width="64">
+            </span>
+
+            <span class="pill scene-pill" data-value="room" onclick="selectCompVideo(activeMethodPill, this, 3)">
+              <img class="thumbnail-img" src="static/ViewPoint/videos/inputs/room.png" alt="room" width="64">
+            </span>
+
+            <span class="pill scene-pill" data-value="scene" onclick="selectCompVideo(activeMethodPill, this, 3)">
+              <img class="thumbnail-img" src="static/ViewPoint/videos/inputs/scene.png" alt="scene" width="64">
+            </span>
+
+            <span class="pill scene-pill" data-value="sea" onclick="selectCompVideo(activeMethodPill, this, 3)">
+              <img class="thumbnail-img" src="static/ViewPoint/videos/inputs/sea.png" alt="sea" width="64">
+            </span>
+
+            <span class="pill scene-pill" data-value="ship" onclick="selectCompVideo(activeMethodPill, this, 3)">
+              <img class="thumbnail-img" src="static/ViewPoint/videos/inputs/ship.png" alt="ship" width="64">
+            </span>
+
+            <span class="pill scene-pill" data-value="snowmountain"
+              onclick="selectCompVideo(activeMethodPill, this, 3)">
+              <img class="thumbnail-img" src="static/ViewPoint/videos/inputs/snowmountain.png" alt="snowmountain" width="64">
+            </span>
+
+            <span class="pill scene-pill" data-value="snowtown" onclick="selectCompVideo(activeMethodPill, this, 3)">
+              <img class="thumbnail-img" src="static/ViewPoint/videos/inputs/snowtown.png" alt="snowtown" width="64">
+            </span>
+
+            <span class="pill scene-pill" data-value="spring" onclick="selectCompVideo(activeMethodPill, this, 3)">
+              <img class="thumbnail-img" src="static/ViewPoint/videos/inputs/spring.png" alt="spring" width="64">
+            </span>
+
+            <span class="pill scene-pill" data-value="sunrise" onclick="selectCompVideo(activeMethodPill, this, 3)">
+              <img class="thumbnail-img" src="static/ViewPoint/videos/inputs/sunrise.png" alt="sunrise" width="64">
+            </span>
+
+            <span class="pill scene-pill" data-value="supernova" onclick="selectCompVideo(activeMethodPill, this, 3)">
+              <img class="thumbnail-img" src="static/ViewPoint/videos/inputs/supernova.png" alt="supernova" width="64">
+            </span>
+
+            <span class="pill scene-pill" data-value="surf" onclick="selectCompVideo(activeMethodPill, this, 3)">
+              <img class="thumbnail-img" src="static/ViewPoint/videos/inputs/surf.png" alt="surf" width="64">
+            </span>
+
+            <span class="pill scene-pill" data-value="vangogh" onclick="selectCompVideo(activeMethodPill, this, 3)">
+              <img class="thumbnail-img" src="static/ViewPoint/videos/inputs/vangogh.png" alt="vangogh" width="64">
+            </span>
+
+            <span class="pill scene-pill" data-value="text" onclick="selectCompVideo(activeMethodPill, this, 3)">
+              <img class="thumbnail-img" src="static/ViewPoint/videos/inputs/text.png" alt="text" width="64">
+            </span>
+          </div>
+
+          <script>
+            activeMethodPill = document.querySelector('.method-pill.active-pill');
+            activeScenePill = document.querySelector('.scene-pill.active-pill');
+            activeModePill = document.querySelector('.mode-pill.active-pill');
+          </script>
+        </div>
+
+      </div>
+      <div class="col-2"></div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row py-3 align-item-center">
+      <div class="col-md-1"></div>
+      <div class="col-md-10 text-center h-100">
+        <h2 class=""><b>Qualitative Comparison</b></h2>
+        <div id="gallery1" class="gallery">
+
+        <div class="gallery-item">
+          <video src="static/ViewPoint/videos/compare/360DVD_0.mp4" controls></video>
+          <p>360DVD </p>
+        </div>
+
+        <div class="gallery-item">
+          <video src="static/ViewPoint/videos/compare/fyc_0.mp4" controls></video>
+          <p>Follow-Your-Canvas </p>
+        </div>
+
+        <div class="gallery-item">
+          <video src="static/ViewPoint/videos/compare/img_0.mp4" controls></video>
+          <p>Imagine360 </p>
+        </div>
+
+        <div class="gallery-item">
+          <video src=" static/ViewPoint/videos/PANO VIDEO/supernova.mp4" controls></video>
+          <p>ViewPoint </p>
+        </div>
+
+      </div>
+      <div id="gallery1" class="gallery">
+
+        <div class="gallery-item">
+          <video src="static/ViewPoint/videos/compare/360DVD_1.mp4" controls></video>
+          <p>360DVD </p>
+        </div>
+
+        <div class="gallery-item">
+          <video src="static/ViewPoint/videos/compare/fyc_1.mp4" controls></video>
+          <p>Follow-Your-Canvas </p>
+        </div>
+
+        <div class="gallery-item">
+          <video src="static/ViewPoint/videos/compare/img_1.mp4" controls></video>
+          <p>Imagine360 </p>
+        </div>
+
+        <div class="gallery-item">
+          <video src=" static/ViewPoint/videos/PANO VIDEO/b2.mp4" controls></video>
+          <p>ViewPoint </p>
+        </div>
+
+      </div>
+        <div class="pagination-dots"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid bg-secondary text-white">
+    <div class="row py-5 align-item-center">
+      <div class="col-md-2"></div>
+      <div class="col-md-8 text-center h-100">
+        <h2 class=""><b>Super Resolution</b></h2>
+        <p class="text-center small-text" style="color: yellow; font-weight: bold;">
+          NOTE: We perform super resolution on equirectangular videos directly using <a href="https://github.com/NJU-PCALab/STAR" style="color: red;">STAR</a>, which is designed for perspective videos, thereby resulting in some spatial artifacts and distortion. This issue can be solved by advanced panoramic super-resolution methods. </p>
+        </p>
+        <!-- ### -->
+        <div class="text-center">
+          <div class="video-container">
+
+            <div class="video">
+              <video class="video" style="width: 100%; max-width: 100%;" id="compVideo0" loop playsinline autoplay
+                muted>
+                <source data-src="static/ViewPoint/videos/super_res/moon.mp4">
+              </video>
+            </div>
+
+          </div>
+          <div class="text-center" style="color: black;" id="mode-pills">
+   
+          </div>
+        </div>
+         <!-- ### -->
+      <!-- ### -->
+      <div class="text-center">
+        <div class="video-container">
+
+          <div class="video">
+            <video class="video" style="width: 100%; max-width: 100%;" id="compVideo0" loop playsinline autoplay
+              muted>
+              <source data-src="static/ViewPoint/videos/super_res/cliff.mp4">
+            </video>
+          </div>
+
+        </div>
+        <div class="text-center" style="color: black;" id="mode-pills">
+        
+        </div>
+      </div>
+       <!-- ### -->
+         <!-- ### -->
+      <div class="text-center">
+        <div class="video-container">
+
+          <div class="video">
+            <video class="video" style="width: 100%; max-width: 100%;" id="compVideo0" loop playsinline autoplay
+              muted>
+              <source data-src="static/ViewPoint/videos/super_res/b2.mp4">
+            </video>
+          </div>
+
+        </div>
+        <div class="text-center" style="color: black;" id="mode-pills">
+     
+        </div>
+      </div>
+       <!-- ### -->
+ <!-- ### -->
+ <div class="text-center">
+  <div class="video-container">
+
+    <div class="video">
+      <video class="video" style="width: 100%; max-width: 100%;" id="compVideo0" loop playsinline autoplay
+        muted>
+        <source data-src="static/ViewPoint/videos/super_res/hometown.mp4">
+      </video>
+    </div>
+
+  </div>
+  <div class="text-center" style="color: black;" id="mode-pills">
+ 
+  </div>
+</div>
+ <!-- ### -->
+ 
+     <!-- ### -->
+     <div class="text-center">
+      <div class="video-container">
+
+        <div class="video">
+          <video class="video" style="width: 100%; max-width: 100%;" id="compVideo0" loop playsinline autoplay
+            muted>
+            <source data-src="static/ViewPoint/videos/super_res/room.mp4">
+          </video>
+        </div>
+
+      </div>
+      <div class="text-center" style="color: black;" id="mode-pills">
+  
+      </div>
+    </div>
+     <!-- ### -->
+       <!-- ### -->
+       <div class="text-center">
+        <div class="video-container">
+
+          <div class="video">
+            <video class="video" style="width: 100%; max-width: 100%;" id="compVideo0" loop playsinline autoplay
+              muted>
+              <source data-src="static/ViewPoint/videos/super_res/scene.mp4">
+            </video>
+          </div>
+
+        </div>
+        <div class="text-center" style="color: black;" id="mode-pills">
+    
+        </div>
+      </div>
+       <!-- ### -->
+ 
+         <!-- ### -->
+      <div class="text-center">
+        <div class="video-container">
+
+          <div class="video">
+            <video class="video" style="width: 100%; max-width: 100%;" id="compVideo0" loop playsinline autoplay
+              muted>
+              <source data-src="static/ViewPoint/videos/super_res/forest.mp4">
+            </video>
+          </div>
+
+        </div>
+        <div class="text-center" style="color: black;" id="mode-pills">
+   
+        </div>
+      </div>
+       <!-- ### -->
+       <!-- ### -->
+       <div class="text-center">
+        <div class="video-container">
+
+          <div class="video">
+            <video class="video" style="width: 100%; max-width: 100%;" id="compVideo0" loop playsinline autoplay
+              muted>
+              <source data-src="static/ViewPoint/videos/super_res/sea.mp4">
+            </video>
+          </div>
+
+        </div>
+        <div class="text-center" style="color: black;" id="mode-pills">
+   
+        </div>
+      </div>
+       <!-- ### -->
+          <!-- ### -->
+      <div class="text-center">
+        <div class="video-container">
+
+          <div class="video">
+            <video class="video" style="width: 100%; max-width: 100%;" id="compVideo0" loop playsinline autoplay
+              muted>
+              <source data-src="static/ViewPoint/videos/super_res/vangogh.mp4">
+            </video>
+          </div>
+
+        </div>
+        <div class="text-center" style="color: black;" id="mode-pills">
+   
+        </div>
+      </div>
+       <!-- ### -->
+         <!-- ### -->
+      <div class="text-center">
+        <div class="video-container">
+
+          <div class="video">
+            <video class="video" style="width: 100%; max-width: 100%;" id="compVideo0" loop playsinline autoplay
+              muted>
+              <source data-src="static/ViewPoint/videos/super_res/snowtown.mp4">
+            </video>
+          </div>
+
+        </div>
+        <div class="text-center" style="color: black;" id="mode-pills">
+   
+        </div>
+      </div>
+       <!-- ### -->
+         <!-- ### -->
+      <div class="text-center">
+        <div class="video-container">
+
+          <div class="video">
+            <video class="video" style="width: 100%; max-width: 100%;" id="compVideo0" loop playsinline autoplay
+              muted>
+              <source data-src="static/ViewPoint/videos/super_res/spring.mp4">
+            </video>
+          </div>
+
+        </div>
+        <div class="text-center" style="color: black;" id="mode-pills">
+     
+        </div>
+      </div>
+       <!-- ### -->
+         <!-- ### -->
+      <div class="text-center">
+        <div class="video-container">
+
+          <div class="video">
+            <video class="video" style="width: 100%; max-width: 100%;" id="compVideo0" loop playsinline autoplay
+              muted>
+              <source data-src="static/ViewPoint/videos/super_res/sunrise.mp4">
+            </video>
+          </div>
+
+        </div>
+        <div class="text-center" style="color: black;" id="mode-pills">
+     
+        </div>
+      </div>
+       <!-- ### -->
+         <!-- ### -->
+      <div class="text-center">
+        <div class="video-container">
+
+          <div class="video">
+            <video class="video" style="width: 100%; max-width: 100%;" id="compVideo0" loop playsinline autoplay
+              muted>
+              <source data-src="static/ViewPoint/videos/super_res/supernova.mp4">
+            </video>
+          </div>
+
+        </div>
+        <div class="text-center" style="color: black;" id="mode-pills">
+       
+          </div>
+        </div>
+      </div>
+       <!-- ### -->
+ 
+ 
+      <div class="col-md-2"></div>
+    </div>
+
+
+    <div class="col-md-2"></div>
+  </div>
+ 
+
+  <style>
+    .bg-customcustom {
+      background-color: #000000cd;
+    }
+
+    pre,
+    code {
+      background-color: transparent;
+      color: #fff;
+    }
+  </style>
+
+  <div class="container-fluid pt-5">
+    <div class="text-center">Template borrowed from <a href="https://ys-imtech.github.io/projects/Imagine360/" style="color: blue;">Imagine360</a>. Thanks a lot!</div>
+    <div class="row py-5 mt-5 bg-customcustom">
+        
+      <div class="col-md-2"></div>
+      <div class="col-md-8">
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+  </div>
+
+
+
+
+
+</body>
+
+</html>
