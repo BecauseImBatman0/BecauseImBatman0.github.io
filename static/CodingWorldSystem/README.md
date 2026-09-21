@@ -15,5 +15,9 @@ Author names, affiliation superscripts, and institution labels are maintained in
 `CodingWorldSystem.html`. All assets are local; no build step, package installation,
 external fonts, or JavaScript CDN is required.
 
+The Paper and Code buttons below the affiliations are disabled placeholders until
+their destination URLs are available. To enable one, replace its button with an
+anchor using the same `resource-button` class and the confirmed URL.
+
 Open `CodingWorldSystem.html` directly or serve the repository with a static HTTP
 server. Use a server with HTTP byte-range support for video seeking.
