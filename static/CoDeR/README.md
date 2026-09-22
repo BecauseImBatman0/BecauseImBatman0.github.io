@@ -1,6 +1,6 @@
-# Coding World System
+# CoDeR
 
-Project page: [`../../CodingWorldSystem.html`](../../CodingWorldSystem.html).
+Project page: [`../../CoDeR.html`](../../CoDeR.html).
 
 The page follows the repository's existing convention: one HTML entry at the
 repository root, with project assets grouped under `static/<project>/`.
@@ -12,7 +12,7 @@ repository root, with project assets grouped under `static/<project>/`.
 - `pdfs/method.pdf`: full-resolution method figure, accessible from the zoom dialog.
 
 Author names, affiliation superscripts, and institution labels are maintained in
-`CodingWorldSystem.html`. All assets are local; no build step, package installation,
+`CoDeR.html`. All assets are local; no build step, package installation,
 external fonts, or JavaScript CDN is required.
 
 The browser tab icon reuses the repository's shared `images/favicon.ico`, matching
@@ -22,5 +22,5 @@ The Paper and Code buttons below the affiliations are disabled placeholders unti
 their destination URLs are available. To enable one, replace its button with an
 anchor using the same `resource-button` class and the confirmed URL.
 
-Open `CodingWorldSystem.html` directly or serve the repository with a static HTTP
+Open `CoDeR.html` directly or serve the repository with a static HTTP
 server. Use a server with HTTP byte-range support for video seeking.

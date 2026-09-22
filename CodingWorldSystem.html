@@ -3,114 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#09131e">
-    <meta name="description" content="Coding World System — project video and method overview.">
-    <title>Coding World System</title>
-    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="static/CodingWorldSystem/css/index.css">
-    <script src="static/CodingWorldSystem/js/index.js" defer></script>
+    <meta http-equiv="refresh" content="0; url=CoDeR.html">
+    <link rel="canonical" href="CoDeR.html">
+    <title>CoDeR</title>
   </head>
-  <body id="top">
-    <a class="skip-link" href="#teaser">Skip to project video</a>
-
-    <main class="project">
-      <header class="project-header">
-        <div class="title-mark" aria-hidden="true"></div>
-        <h1>Coding <span>World</span> System</h1>
-        <div class="authors" aria-label="Authors">
-          <p class="author-row">
-            <span class="author">Zixun Fang<sup>1,2</sup></span>
-            <span class="author">Yawen Shao<sup>1,2</sup></span>
-            <span class="author">Kai Zhu<sup>2</sup></span>
-            <span class="author">Jie Xiao<sup>2</sup></span>
-            <span class="author">Shihan Chen<sup>1</sup></span>
-            <span class="author">Yu Liu<sup>2</sup></span>
-          </p>
-          <p class="author-row">
-            <span class="author">Xueyang Fu<sup>1</sup></span>
-            <span class="author">Yang Cao<sup>1</sup></span>
-            <span class="author">Wei Zhai<sup>1</sup></span>
-            <span class="author">Zheng-Jun Zha<sup>1</sup></span>
-          </p>
-        </div>
-        <p class="affiliations" aria-label="Affiliations">
-          <span><sup>1</sup> USTC</span>
-          <span aria-hidden="true">·</span>
-          <span><sup>2</sup> TongYi Lab</span>
-        </p>
-        <div class="project-links" role="group" aria-label="Project resources">
-          <button class="resource-button" type="button" disabled title="Coming soon" aria-label="Paper (coming soon)">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M9 12h6M9 16h6"/></svg>
-            <span>Paper</span>
-          </button>
-          <button class="resource-button" type="button" disabled title="Coming soon" aria-label="Code (coming soon)">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 7-5 5 5 5m10-10 5 5-5 5M14 4l-4 16"/></svg>
-            <span>Code</span>
-          </button>
-        </div>
-      </header>
-
-      <section id="teaser" class="teaser-section" aria-label="Teaser video">
-        <figure>
-          <div class="video-frame">
-            <video id="teaser-video" controls playsinline preload="none"
-              poster="static/CodingWorldSystem/images/teaser-poster.jpg" width="1280" height="704"
-              aria-label="Coding World System teaser video">
-              <source src="static/CodingWorldSystem/videos/teaser.mp4" type="video/mp4">
-              Your browser does not support embedded video.
-              <a href="static/CodingWorldSystem/videos/teaser.mp4">Download the teaser video</a>.
-            </video>
-            <button class="play-button" id="play-teaser" type="button" aria-label="Play teaser video" hidden>
-              <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M8 5.5v13l10-6.5z" fill="currentColor"/></svg>
-            </button>
-          </div>
-        </figure>
-        <p id="video-error" class="video-error" role="status" hidden>
-          Unable to play the video in this browser. <a href="static/CodingWorldSystem/videos/teaser.mp4" download>Download the video</a> to watch it locally.
-        </p>
-      </section>
-
-      <section id="method" class="method-section" aria-labelledby="method-title">
-        <div class="section-heading">
-          <span class="section-eyebrow">A LOOK INSIDE</span>
-          <h2 id="method-title">Method Overview</h2>
-        </div>
-        <figure>
-          <a class="method-figure" id="open-method" href="static/CodingWorldSystem/images/method.png" target="_blank" rel="noopener"
-            aria-label="Enlarge the Coding World System method diagram">
-            <img src="static/CodingWorldSystem/images/method.png" alt="Coding World System method diagram: concepts guide an LLM creator; coding agents construct the world, video models act as artists, and travelers observe it. The right panel shows observation and world registration."
-              width="2560" height="1323" loading="lazy" decoding="async">
-            <span class="expand-hint" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg>
-              Enlarge
-            </span>
-          </a>
-          <figcaption class="method-caption">
-            <span>Overview of the Coding World System.</span>
-          </figcaption>
-        </figure>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <span>Coding World System</span>
-      <a href="#top">Back to top <span aria-hidden="true">↑</span></a>
-    </footer>
-
-    <dialog id="method-dialog" aria-labelledby="dialog-title">
-      <div class="dialog-toolbar">
-        <h2 id="dialog-title">Method Overview</h2>
-        <div class="dialog-actions">
-          <button type="button" id="zoom-method" class="dialog-action" aria-pressed="false">Zoom in</button>
-          <a class="dialog-action" href="static/CodingWorldSystem/pdfs/method.pdf" target="_blank" rel="noopener">PDF <span aria-hidden="true">↗</span></a>
-          <button type="button" id="close-method" class="close-button" aria-label="Close method diagram" autofocus>
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg>
-          </button>
-        </div>
-      </div>
-      <div class="dialog-image-container">
-        <img src="static/CodingWorldSystem/images/method.png" width="2560" height="1323" alt="Enlarged Coding World System method diagram">
-      </div>
-    </dialog>
+  <body>
+    <p>This project is now called CoDeR. <a href="CoDeR.html">Visit the CoDeR project page</a>.</p>
   </body>
 </html>
