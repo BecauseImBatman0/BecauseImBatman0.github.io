@@ -6,9 +6,14 @@ The page follows the repository's existing convention: one HTML entry at the
 repository root, with project assets grouped under `static/<project>/`.
 
 - `css/index.css`: responsive layout, typography, and background styling.
-- `js/index.js`: teaser playback and the method diagram's zoom dialog.
+- `js/index.js`: teaser/comparison playback and the method diagram's zoom dialog.
 - `images/`: background, method diagram, and video poster.
 - `videos/teaser.mp4`: browser-ready H.264/AAC teaser with fast-start metadata.
+- `videos/supplementary/video1.mp4` through `video4.mp4`: the four comparison
+  videos from `supp.zip`, presented in filename order below the method figure.
+  The archive's teaser is excluded. These files are already H.264/yuv420p with
+  fast-start metadata and are copied without re-encoding.
+- `images/supplementary/`: first-frame posters for the comparison videos.
 - `pdfs/method.pdf`: full-resolution method figure, accessible from the zoom dialog.
 
 Author names, affiliation superscripts, and institution labels are maintained in
